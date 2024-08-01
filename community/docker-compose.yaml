@@ -150,7 +150,6 @@ services:
     environment:
       - USE_HTTPS=${USE_HTTPS:-false}
       - LAN_MODE=${LAN_MODE:-false}
-      - LAN_DOMAIN=${LAN_DOMAIN:-}
       - LAN_PRIVATE_IP=${LAN_PRIVATE_IP:-}
       - SERVER_PORT=6080
       - CALL_NAME_ID=OpenViduCall-LOCAL
@@ -184,7 +183,6 @@ services:
     restart: on-failure
     environment:
       - USE_HTTPS=${USE_HTTPS:-false}
-      - LAN_DOMAIN=${LAN_DOMAIN:-}
       - LAN_MODE=${LAN_MODE:-false}
       - LAN_PRIVATE_IP=${LAN_PRIVATE_IP:-}
       - LIVEKIT_API_KEY=${LIVEKIT_API_KEY:-}
