@@ -6,7 +6,6 @@ services:
     extra_hosts:
       - 223.130.139.215:host-gateway
     environment:
-      - LAN_DOMAIN=${LAN_DOMAIN:-}
       - LAN_PRIVATE_IP=223.130.139.215
       - LAN_MODE=${LAN_MODE:-false}
       - USE_HTTPS=${USE_HTTPS:-false}
