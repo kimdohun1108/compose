@@ -149,7 +149,7 @@ services:
     environment:
       - USE_HTTPS=${USE_HTTPS:-false}
       - LAN_MODE=${LAN_MODE:-false}
-      - LAN_PRIVATE_IP=${LAN_PRIVATE_IP:-}
+      - LAN_PRIVATE_IP=223.130.139.215
       - SERVER_PORT=6080
       - CALL_NAME_ID=OpenViduCall-LOCAL
       - LIVEKIT_URL_PRIVATE=ws://223.130.139.215:7880/
@@ -183,7 +183,7 @@ services:
     environment:
       - USE_HTTPS=${USE_HTTPS:-false}
       - LAN_MODE=${LAN_MODE:-false}
-      - LAN_PRIVATE_IP=${LAN_PRIVATE_IP:-}
+      - LAN_PRIVATE_IP=223.130.139.215
       - LIVEKIT_API_KEY=${LIVEKIT_API_KEY:-}
       - LIVEKIT_API_SECRET=${LIVEKIT_API_SECRET:-}
       - DASHBOARD_ADMIN_USERNAME=${DASHBOARD_ADMIN_USERNAME:-}
@@ -214,7 +214,7 @@ services:
     environment:
       - USE_HTTPS=${USE_HTTPS:-false}
       - LAN_MODE=${LAN_MODE:-false}
-      - LAN_PRIVATE_IP=${LAN_PRIVATE_IP:-}
+      - LAN_PRIVATE_IP=223.130.139.215
       - RUN_WITH_SCRIPT=${RUN_WITH_SCRIPT:-false}
     user: root
     command: /bin/sh /scripts/setup.sh
