@@ -31,7 +31,7 @@ webhook:
     api_key: ${LIVEKIT_API_KEY} 
     urls:
         - http://223.130.139.215:6080/livekit/webhook
-        - http://default-app:6080/livekit/webhook
+        - http://223.130.139.215:6080/livekit/webhook
 ingress:
     rtmp_base_url: rtmp://223.130.139.215:1935/rtmp
     whip_base_url: http://223.130.139.215:8085/whip

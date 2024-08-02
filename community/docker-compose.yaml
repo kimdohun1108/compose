@@ -6,15 +6,15 @@ services:
     extra_hosts:
       - host.docker.internal:host-gateway
     environment:
-      - LAN_PRIVATE_IP=${LAN_PRIVATE_IP}
-      - LAN_MODE=${LAN_MODE}
-      - USE_HTTPS=${USE_HTTPS}
-      - LIVEKIT_API_KEY=${LIVEKIT_API_KEY}
-      - LIVEKIT_API_SECRET=${LIVEKIT_API_SECRET}
-      - DASHBOARD_ADMIN_USERNAME=${DASHBOARD_ADMIN_USERNAME}
-      - DASHBOARD_ADMIN_PASSWORD=${DASHBOARD_ADMIN_PASSWORD}
-      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
-      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
+      - LAN_PRIVATE_IP=${LAN_PRIVATE_IP:-223.130.139.215}
+      - LAN_MODE=${LAN_MODE:-false}
+      - USE_HTTPS=${USE_HTTPS:-false}
+      - LIVEKIT_API_KEY=${LIVEKIT_API_KEY:-}
+      - LIVEKIT_API_SECRET=${LIVEKIT_API_SECRET:-}
+      - DASHBOARD_ADMIN_USERNAME=${DASHBOARD_ADMIN_USERNAME:-}
+      - DASHBOARD_ADMIN_PASSWORD=${DASHBOARD_ADMIN_PASSWORD:-}
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY:-}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY:-}
     volumes:
       - ./custom-layout:/var/www/custom-layout
     ports:
@@ -37,7 +37,7 @@ services:
     command: >
       redis-server
       --bind 0.0.0.0
-      --requirepass ${REDIS_PASSWORD}
+      --requirepass ${REDIS_PASSWORD:-}
     depends_on:
       setup:
         condition: service_completed_successfully
@@ -49,11 +49,11 @@ services:
     ports:
       - 9000:9000
     environment:
-      - MINIO_ROOT_USER=${MINIO_ACCESS_KEY}
-      - MINIO_ROOT_PASSWORD=${MINIO_SECRET_KEY}
+      - MINIO_ROOT_USER=${MINIO_ACCESS_KEY:-}
+      - MINIO_ROOT_PASSWORD=${MINIO_SECRET_KEY:-}
       - MINIO_DEFAULT_BUCKETS=openvidu
       - MINIO_CONSOLE_SUBPATH=/minio-console
-      - MINIO_BROWSER_REDIRECT_URL=http://${LAN_PRIVATE_IP}:7880/minio-console
+      - MINIO_BROWSER_REDIRECT_URL=http://223.130.139.215:7880/minio-console
     volumes:
       - minio-data:/bitnami/minio/data
       - minio-certs:/certs
@@ -70,8 +70,8 @@ services:
     volumes:
       - mongo-data:/bitnami/mongodb
     environment:
-      - MONGODB_ROOT_USER=${MONGO_ADMIN_USERNAME}
-      - MONGODB_ROOT_PASSWORD=${MONGO_ADMIN_PASSWORD}
+      - MONGODB_ROOT_USER=${MONGO_ADMIN_USERNAME:-}
+      - MONGODB_ROOT_PASSWORD=${MONGO_ADMIN_PASSWORD:-}
       - EXPERIMENTAL_DOCKER_DESKTOP_FORCE_QEMU=${EXPERIMENTAL_DOCKER_DESKTOP_FORCE_QEMU}
     depends_on:
       setup:
@@ -83,8 +83,8 @@ services:
     restart: unless-stopped
     environment:
       - SERVER_PORT=5000
-      - ADMIN_USERNAME=${DASHBOARD_ADMIN_USERNAME}
-      - ADMIN_PASSWORD=${DASHBOARD_ADMIN_PASSWORD}
+      - ADMIN_USERNAME=${DASHBOARD_ADMIN_USERNAME:-}
+      - ADMIN_PASSWORD=${DASHBOARD_ADMIN_PASSWORD:-}
       - DATABASE_URL=mongodb://${MONGO_ADMIN_USERNAME}:${MONGO_ADMIN_PASSWORD}@mongo:27017
     depends_on:
       setup:
@@ -97,7 +97,7 @@ services:
     extra_hosts:
       - host.docker.internal:host-gateway
     environment:
-      - LAN_PRIVATE_IP=${LAN_PRIVATE_IP}
+      - LAN_PRIVATE_IP=${LAN_PRIVATE_IP:-223.130.139.215}
     ports:
       - 3478:3478/udp
       - 7881:7881/tcp
@@ -147,27 +147,27 @@ services:
     container_name: openvidu-call
     restart: on-failure
     environment:
-      - USE_HTTPS=${USE_HTTPS}
-      - LAN_MODE=${LAN_MODE}
-      - LAN_PRIVATE_IP=${LAN_PRIVATE_IP}
+      - USE_HTTPS=${USE_HTTPS:-false}
+      - LAN_MODE=${LAN_MODE:-false}
+      - LAN_PRIVATE_IP=${LAN_PRIVATE_IP:-223.130.139.215}
       - SERVER_PORT=6080
       - CALL_NAME_ID=OpenViduCall-LOCAL
-      - LIVEKIT_URL_PRIVATE=ws://${LAN_PRIVATE_IP}:7880/
+      - LIVEKIT_URL_PRIVATE=ws://223.130.139.215:7880/
       - LIVEKIT_API_KEY=${LIVEKIT_API_KEY}
       - LIVEKIT_API_SECRET=${LIVEKIT_API_SECRET}
       - CALL_PRIVATE_ACCESS=${CALL_PRIVATE_ACCESS}
-      - CALL_USER=${CALL_USER}
-      - CALL_SECRET=${CALL_SECRET}
-      - CALL_RECORDING=${CALL_RECORDING}
-      - CALL_ADMIN_USER=${CALL_ADMIN_USER}
-      - CALL_ADMIN_SECRET=${CALL_ADMIN_SECRET}
-      - CALL_LOG_LEVEL=${CALL_LOG_LEVEL}
-      - CALL_S3_BUCKET=${CALL_S3_BUCKET}
-      - CALL_S3_SERVICE_ENDPOINT=${CALL_S3_SERVICE_ENDPOINT}
+      - CALL_USER=${CALL_USER:-}
+      - CALL_SECRET=${CALL_SECRET:-}
+      - CALL_RECORDING=${CALL_RECORDING:-}
+      - CALL_ADMIN_USER=${CALL_ADMIN_USER:-admin}
+      - CALL_ADMIN_SECRET=${CALL_ADMIN_SECRET:-admin}
+      - CALL_LOG_LEVEL=${CALL_LOG_LEVEL:-info}
+      - CALL_S3_BUCKET=${CALL_S3_BUCKET:-openvidu}
+      - CALL_S3_SERVICE_ENDPOINT=${CALL_S3_SERVICE_ENDPOINT:-http://minio:9000}
       - CALL_S3_ACCESS_KEY=${MINIO_ACCESS_KEY}
       - CALL_S3_SECRET_KEY=${MINIO_SECRET_KEY}
-      - CALL_AWS_REGION=${CALL_AWS_REGION}
-      - CALL_S3_WITH_PATH_STYLE_ACCESS=${CALL_S3_WITH_PATH_STYLE_ACCESS}
+      - CALL_AWS_REGION=${CALL_AWS_REGION:-us-east-1}
+      - CALL_S3_WITH_PATH_STYLE_ACCESS=${CALL_S3_WITH_PATH_STYLE_ACCESS:-true}
     volumes:
       - ./scripts/entrypoint_default_app.sh:/scripts/entrypoint.sh
       - ./scripts/utils.sh:/scripts/utils.sh
@@ -181,15 +181,15 @@ services:
     container_name: ready-check
     restart: on-failure
     environment:
-      - USE_HTTPS=${USE_HTTPS}
-      - LAN_MODE=${LAN_MODE}
-      - LAN_PRIVATE_IP=${LAN_PRIVATE_IP}
-      - LIVEKIT_API_KEY=${LIVEKIT_API_KEY}
-      - LIVEKIT_API_SECRET=${LIVEKIT_API_SECRET}
-      - DASHBOARD_ADMIN_USERNAME=${DASHBOARD_ADMIN_USERNAME}
-      - DASHBOARD_ADMIN_PASSWORD=${DASHBOARD_ADMIN_PASSWORD}
-      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
-      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
+      - USE_HTTPS=${USE_HTTPS:-false}
+      - LAN_MODE=${LAN_MODE:-false}
+      - LAN_PRIVATE_IP=${LAN_PRIVATE_IP:-223.130.139.215}
+      - LIVEKIT_API_KEY=${LIVEKIT_API_KEY:-}
+      - LIVEKIT_API_SECRET=${LIVEKIT_API_SECRET:-}
+      - DASHBOARD_ADMIN_USERNAME=${DASHBOARD_ADMIN_USERNAME:-}
+      - DASHBOARD_ADMIN_PASSWORD=${DASHBOARD_ADMIN_PASSWORD:-}
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY:-}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY:-}
     depends_on:
       - openvidu
       - ingress
