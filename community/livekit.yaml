@@ -4,7 +4,7 @@ openvidu:
         enabled: true
         interval: 10s
         expiration: 768h # 32 days
-        mongo_url: mongodb://mongoadmin:mongoadmin@mongo:27017
+        mongo_url: mongodb://${MONGO_ADMIN_USERNAME}:${MONGO_ADMIN_PASSWORD}@mongo:27017
 
 # LiveKit configuration
 port: 7880
@@ -17,7 +17,7 @@ rtc:
 redis:
     address: redis:6379
     username: ""
-    password: redispassword
+    password: ${REDIS_PASSWORD}
     db: 0
     use_tls: false
 turn:
@@ -26,15 +26,15 @@ turn:
     relay_range_start: 40000
     relay_range_end: 50000
 keys:
-    devkey: secret
+    ${LIVEKIT_API_KEY}: ${LIVEKIT_API_SECRET}
 webhook:
-    api_key: devkey
+    api_key: ${LIVEKIT_API_KEY} 
     urls:
-        - http://host.docker.internal:6080/livekit/webhook
+        - http://223.130.139.215:6080/livekit/webhook
         - http://default-app:6080/livekit/webhook
 ingress:
-    rtmp_base_url: rtmp://localhost:1935/rtmp
-    whip_base_url: http://localhost:8085/whip
+    rtmp_base_url: rtmp://223.130.139.215:1935/rtmp
+    whip_base_url: http://223.130.139.215:8085/whip
 logging:
     # Logging level for the LiveKit server.
     # Values: debug, info, warn, error.

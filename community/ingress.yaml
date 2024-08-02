@@ -6,7 +6,7 @@ redis:
     use_tls: false
 api_key: devkey
 api_secret: secret
-ws_url: ws://openvidu:7880
+ws_url: ws://223.130.139.215:7880
 rtmp_port: 1935
 whip_port: 8085
 http_relay_port: 9090
